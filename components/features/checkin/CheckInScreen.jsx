@@ -6,7 +6,7 @@ import CheckInForm from "./CheckInForm";
 import ScanPrompt from "./ScanPrompt";
 import TicketView from "./TicketView";
 
-const CheckInScreen = ({ hasEntry, expired }) => {
+const CheckInScreen = ({ hasEntry, expired, menu }) => {
   const { ticket, saveTicket, isReady } = useLastTicket();
   const [canCheckIn, setCanCheckIn] = useState(hasEntry);
   const [isViewingTicket, setIsViewingTicket] = useState(false);
@@ -21,7 +21,7 @@ const CheckInScreen = ({ hasEntry, expired }) => {
   if (canCheckIn && !isViewingTicket) {
     return (
       <>
-        <CheckInForm onCheckedIn={handleCheckedIn} onScanNeeded={() => setCanCheckIn(false)} />
+        <CheckInForm menu={menu} onCheckedIn={handleCheckedIn} onScanNeeded={() => setCanCheckIn(false)} />
         {ticket && (
           <button
             type="button"

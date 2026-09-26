@@ -1,22 +1,22 @@
 "use client";
 
 import { useState } from "react";
-import { SERVICES } from "@/lib/services";
+import { groupByCategory } from "@/lib/services";
 
-const CheckInForm = ({ onCheckedIn, onScanNeeded }) => {
+const CheckInForm = ({ menu, onCheckedIn, onScanNeeded }) => {
   const [name, setName] = useState("");
-  const [services, setServices] = useState([]);
+  const [items, setItems] = useState([]);
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
 
-  const toggleService = (id) =>
-    setServices((current) =>
+  const toggleItem = (id) =>
+    setItems((current) =>
       current.includes(id) ? current.filter((s) => s !== id) : [...current, id]
     );
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    if (!services.length) {
+    if (!items.length) {
       setError("Please choose at least one service.");
       return;
     }
@@ -26,7 +26,7 @@ const CheckInForm = ({ onCheckedIn, onScanNeeded }) => {
       const res = await fetch("/api/checkin", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name: name.trim(), services }),
+        body: JSON.stringify({ name: name.trim(), items }),
       });
       const body = await res.json();
       if (body.code === "scan") {
@@ -58,27 +58,39 @@ const CheckInForm = ({ onCheckedIn, onScanNeeded }) => {
       />
 
       <p className="mb-2 font-medium">Choose your service</p>
-      <div className="mb-6 grid grid-cols-2 gap-3">
-        {SERVICES.map((service) => {
-          const isSelected = services.includes(service.id);
-          return (
-            <button
-              key={service.id}
-              type="button"
-              aria-pressed={isSelected}
-              onClick={() => toggleService(service.id)}
-              className={`rounded-xl border-2 py-5 text-lg font-semibold transition ${
-                isSelected
-                  ? "border-pink-600 bg-pink-600 text-white"
-                  : "border-slate-300 bg-white text-slate-700"
-              }`}
-            >
-              {isSelected ? "✓ " : ""}
-              {service.label}
-            </button>
-          );
-        })}
-      </div>
+      {!menu.length && (
+        <p className="mb-6 text-slate-500">No services available right now. Please ask the front desk.</p>
+      )}
+      {groupByCategory(menu)
+        .filter((category) => category.items.length)
+        .map((category) => (
+          <fieldset key={category.id} className="mb-5">
+            <legend className="mb-2 text-sm font-bold uppercase tracking-wide text-pink-700">
+              {category.label}
+            </legend>
+            <div className="grid grid-cols-2 gap-3">
+              {category.items.map((item) => {
+                const isSelected = items.includes(item.id);
+                return (
+                  <button
+                    key={item.id}
+                    type="button"
+                    aria-pressed={isSelected}
+                    onClick={() => toggleItem(item.id)}
+                    className={`rounded-xl border-2 px-2 py-4 text-lg font-semibold transition ${
+                      isSelected
+                        ? "border-pink-600 bg-pink-600 text-white"
+                        : "border-slate-300 bg-white text-slate-700"
+                    }`}
+                  >
+                    {isSelected ? "✓ " : ""}
+                    {item.name}
+                  </button>
+                );
+              })}
+            </div>
+          </fieldset>
+        ))}
 
       {error && <p className="mb-3 text-center text-red-600">{error}</p>}
       <button
