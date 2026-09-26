@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { serviceLabel } from "@/lib/services";
 
 const POLL_MS = 15000;
 
@@ -41,7 +40,7 @@ const TicketView = ({ ticket, onNewCheckIn }) => {
       <p className="text-lg font-medium text-slate-500">Your number</p>
       <p className="my-2 text-8xl font-black text-pink-600">#{ticket.ticket_number}</p>
       {ticket.name && <p className="text-2xl font-semibold">{ticket.name}</p>}
-      <p className="mt-2 text-lg">{ticket.services.map(serviceLabel).join(" + ")}</p>
+      <p className="mt-2 text-lg">{ticket.services.join(" + ")}</p>
       <p className="mt-1 text-slate-500">
         {checkedInAt.toLocaleDateString()} · {checkedInAt.toLocaleTimeString([], { hour: "numeric", minute: "2-digit" })}
       </p>

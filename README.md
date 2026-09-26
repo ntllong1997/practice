@@ -2,8 +2,9 @@
 
 Walk-in queue for a nail salon.
 
-- **Customers** scan the QR code at the front desk, optionally type their name, pick **Pedicure** and/or **Nails**, and get a queue number (they screenshot it). The ticket also shows how many people are ahead of them.
+- **Customers** scan the QR code at the front desk, optionally type their name, pick services from the menu (grouped under **Pedicure** and **Nails**), and get a queue number (they screenshot it). The ticket also shows how many people are ahead of them.
 - **Technicians** share one dashboard (`/dashboard`) protected by a staff PIN. Tap a service to start it (card turns **red**), tap again when done (card turns **green** if the customer still has another service, **blue** when everything is done).
+- **Service menu** (`/dashboard/services`, staff PIN): staff add, rename or remove services under the two categories, Pedicure and Nails.
 - **Front-desk screen** (`/qr`) shows a QR code that changes every 60 seconds, so people can't check in from home with an old link.
 
 Numbers restart at **#1 every day** (salon time zone, America/Chicago by default).
@@ -18,11 +19,12 @@ Numbers restart at **#1 every day** (salon time zone, America/Chicago by default
 | `/enter?k=…` | Customer's phone (from QR) | Validates the code, then redirects to `/` |
 | `/` | Customer | Check-in form, then their ticket |
 | `/dashboard` | Technicians (staff PIN) | Live list of today's customers |
+| `/dashboard/services` | Staff (staff PIN) | Edit the service menu |
 
 ## Tech
 
 - Next.js (App Router) + React + Tailwind CSS, deployed on Vercel
-- Supabase Postgres. Tables live in a private `salon` schema; the app only calls `public.salon_*` functions from the server, and each function requires `SALON_SECRET`. See [`supabase/migrations/0001_salon_init.sql`](supabase/migrations/0001_salon_init.sql).
+- Supabase Postgres. Tables live in a private `salon` schema; the app only calls `public.salon_*` functions from the server, and each function requires `SALON_SECRET`. See [`supabase/migrations/`](supabase/migrations).
 - The dashboard refreshes every 3 seconds, so all technician devices stay in sync.
 
 ## Environment variables
@@ -38,7 +40,7 @@ All are server-only. Set them in Vercel → Project → Settings → Environment
 
 ## Database setup (new Supabase project)
 
-1. Run `supabase/migrations/0001_salon_init.sql` in the Supabase SQL editor.
+1. Run the files in `supabase/migrations/` in order (`0001_…`, then `0002_…`) in the Supabase SQL editor.
 2. Create the settings row (replace the values):
 
    ```sql

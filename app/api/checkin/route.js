@@ -5,7 +5,7 @@ import { rpc } from "@/lib/supabase";
 
 const CheckInSchema = z.object({
   name: z.string().trim().max(40).optional().default(""),
-  services: z.array(z.enum(["pedicure", "nails"])).min(1).max(2),
+  items: z.array(z.uuid()).min(1).max(10),
 });
 
 export const POST = async (request) => {
@@ -26,7 +26,7 @@ export const POST = async (request) => {
     const ticket = await rpc("salon_check_in", {
       p_nonce: entry.n,
       p_name: parsed.data.name,
-      p_services: parsed.data.services,
+      p_items: parsed.data.items,
     });
     const response = NextResponse.json({ ticket });
     clearEntry(response);
