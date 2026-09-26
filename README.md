@@ -5,7 +5,7 @@ Walk-in queue for a nail salon.
 - **Customers** scan the QR code at the front desk, optionally type their name, pick services from the menu (grouped under **Pedicure** and **Nails**), and get a queue number (they screenshot it). The ticket also shows how many people are ahead of them.
 - **Technicians** share one dashboard (`/dashboard`) protected by a staff PIN. Tap a service to start it (card turns **red**), tap again when done (card turns **green** if the customer still has another service, **blue** when everything is done).
 - **Service menu** (`/dashboard/services`, staff PIN): staff add, rename or remove services under the two categories, Pedicure and Nails.
-- **Front-desk screen** (`/qr`) shows a QR code that changes every 60 seconds, so people can't check in from home with an old link.
+- **Printable QR code** (`/qr`, staff PIN): print it once and put it at the front desk. Each scan allows one check-in, and the link is removed from the address bar so it can't be copied.
 
 Numbers restart at **#1 every day** (salon time zone, America/Chicago by default).
 
@@ -15,7 +15,7 @@ Numbers restart at **#1 every day** (salon time zone, America/Chicago by default
 
 | URL | Who | What |
 |---|---|---|
-| `/qr` | Front-desk tablet/TV (staff PIN) | Rotating check-in QR code |
+| `/qr` | Staff (staff PIN) | Printable check-in QR code |
 | `/enter?k=…` | Customer's phone (from QR) | Validates the code, then redirects to `/` |
 | `/` | Customer | Check-in form, then their ticket |
 | `/dashboard` | Technicians (staff PIN) | Live list of today's customers |
@@ -64,7 +64,7 @@ update salon.settings set staff_pin_hash = extensions.crypt('NEW_PIN', extension
 update salon.settings set app_key_hash = extensions.crypt('NEW_SECRET', extensions.gen_salt('bf'));
 ```
 
-Then update `SALON_SECRET` in Vercel and redeploy.
+Then update `SALON_SECRET` in Vercel and redeploy. This also changes the QR code, so print a new one from `/qr` (old prints stop working).
 
 ### Change the time zone
 
@@ -76,7 +76,7 @@ update salon.settings set timezone = 'America/New_York';
 
 1. vercel.com → **Add New… → Project** → import this GitHub repo (framework: Next.js, default settings).
 2. Add the environment variables above.
-3. Deploy. Open `https://<your-app>.vercel.app/qr` on the front-desk tablet and `…/dashboard` on technician devices.
+3. Deploy. Open `https://<your-app>.vercel.app/qr`, print the QR code for the front desk, and open `…/dashboard` on technician devices.
 
 ## Local development
 

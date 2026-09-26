@@ -31,7 +31,7 @@ const Dashboard = () => {
         </div>
         <div className="flex items-center gap-4">
           <a href="/dashboard/services" className="text-pink-700 underline">Services</a>
-          <a href="/qr" className="text-pink-700 underline">QR screen</a>
+          <a href="/qr" className="text-pink-700 underline">Print QR</a>
           <button type="button" onClick={handleLogout} className="text-slate-500 underline">
             Sign out
           </button>

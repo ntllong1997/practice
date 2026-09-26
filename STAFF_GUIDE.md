@@ -1,10 +1,10 @@
 # Staff Guide – Check-in & Dashboard
 
-## Every morning (front desk)
+## One-time setup: print the QR code
 
-1. On the front-desk tablet, open **`https://<your-site>/qr`**.
-2. First time only: enter the **staff PIN**.
-3. Leave it on the screen, plugged in, with auto-lock turned off. The QR code changes every minute by itself.
+1. On a computer or phone, open **`https://<your-site>/qr`** and enter the **staff PIN**.
+2. Tap **🖨️ Print** and put the printed QR code at the front desk.
+3. That's it. The same code works every day. (You only need to print a new one if the owner changes `SALON_SECRET`.)
 
 ## How customers check in
 
@@ -12,7 +12,7 @@
 2. They type their name (optional), tap the services they want (listed under **Pedicure** and **Nails**) → **Check in**.
 3. Their phone shows a big number like **#7**. Remind them to **take a screenshot**.
 4. One scan = one check-in. Checking in another person (e.g. a friend) needs another scan.
-5. An old or shared link won't work. The customer just needs to scan the code on the screen again.
+5. A copied link won't work. The customer just needs to scan the printed code.
 
 ## Technician dashboard
 

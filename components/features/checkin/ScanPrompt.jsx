@@ -7,7 +7,7 @@ const ScanPrompt = ({ expired }) => (
     </p>
     {expired && (
       <p className="mt-4 rounded-xl bg-amber-50 p-3 text-amber-800">
-        That check-in link has expired. Scan the code on the screen again.
+        That check-in link isn&apos;t valid. Please scan the QR code at the front desk.
       </p>
     )}
   </div>
